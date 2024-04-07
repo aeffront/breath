@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+		<style>
+			body { margin: 0; }
+		</style>
+		
+	</head>
+	<body>
+
+		<audio id="audioElement1" src="kong.wav"></audio>
+		<audio id="audioElement2" src="kong2.wav"></audio>
+		
+		<canvas id="myCanvas"></canvas>
+		<button id="myButton"></button>
+
+		<script type="module" >
+			const audioElement1 = document.getElementById('audioElement1');
+			const audioElement2 = document.getElementById('audioElement2');
+
+			let canvas = document.getElementById('myCanvas');
+			    let ctx = canvas.getContext('2d');
+			    let width;
+			    let height;
+			    canvas.width = width = window.innerWidth;
+			    canvas.height = height = window.innerHeight;
+
+			    console.log(width,height);
+
+			    let text = 'kjhgfghjklkjhghjhgfdsdfghj<br>jhgfdsdfghjk';
+
+			    ctx.textAlign = 'center';
+
+			    ctx.fillText(text,width/2,height/2);
+
+			    
+
+			let button = document.getElementById('myButton');
+			canvas.addEventListener('touchstart',((e)=>{
+				
+		    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+		    class Circle{
+			    	constructor(size,factor){
+			    		this.x = width/2;
+			    	    this.y = height/2;
+			    	    this.size = size;
+			    	    this.factor = factor
+			    	}
+			    	
+
+			    	update(){
+			    		this.size +=this.factor;
+			    	}
+
+			    	draw(){
+			    		
+			    		ctx.save()
+			    		ctx.beginPath();
+			    		ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+			    		ctx.stroke();
+			    		ctx.restore();
+			    	}
+			    }
+
+			let frame=0;
+			let count=0;
+			let circles = [];
+			let circle;
+
+
+			function sketch(){
+
+				frame++
+				
+				ctx.fillStyle = 'white';
+				ctx.fillRect(0,0,width,height);
+
+				ctx.strokeStyle =ctx.fillStyle = 'hsl(120,'+(1+Math.sin(frame*0.005*Math.PI))*100+'%,70%)';
+
+                ctx.beginPath()
+                ctx.arc(width/2,height/2,(1+Math.sin(frame*0.005*Math.PI))*0.5*height*0.3+height*0.1,0,Math.PI*2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath()
+                ctx.arc(width/2,height/2,(1+Math.sin(frame*0.005*Math.PI))*0.5*height*0.3+height*0.15,0,Math.PI*2);
+                
+                ctx.stroke();
+
+                circles.forEach((circle)=>{
+                		circle.update();
+                        circle.draw();
+                    });
+
+                if(Math.sin(frame*0.005*Math.PI)==1) {
+                	count++;
+                	audioElement1.currentTime = 0;
+                	audioElement1.play();
+
+                	const circle = new Circle(height*0.45,1);
+                	circles.push(circle);
+
+                }
+
+
+                else if(Math.sin(frame*0.005*Math.PI)==-1) {
+                	
+                	audioElement2.currentTime = 0;
+                	audioElement2.play();
+
+                	const circle = new Circle(height*0.15,3);
+                	circles.push(circle);
+                }
+
+				requestAnimationFrame(sketch);
+
+			}
+
+			sketch();
+
+
+
+
+
+
+
+
+
+			}))
+			
+            
+			
+			
+
+			
+
+
+		</script>
+	</body>
+</html>
