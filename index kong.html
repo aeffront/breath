@@ -6,21 +6,53 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
 		<style>
-			body { margin: 0; }
+			
+
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            border: 0px solid black;
+        }
+
+        #overlayParagraph1 {
+        	font-family: helvetica;
+        	text-align:center;
+
+        	display: block;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #95abf3;
+            padding: 10px;
+            border-radius: 0px;
+            z-index: 10; /* Assurez-vous que le paragraphe est au-dessus du canvas */
+        }
+        
 		</style>
 		
 	</head>
 	<body>
-
-		<audio id="audioElement1" src="kong.wav"></audio>
-		<audio id="audioElement2" src="kong2.wav"></audio>
+		<div id="contenu">
 		
 		<canvas id="myCanvas"></canvas>
-		<button id="myButton"></button>
+		<p id="overlayParagraph1">Nous vous invitons à pratiquer un exercice de méditation de pleine conscience en utilisant votre respiration comme point focal. 
+		Suivez simplement le rythme du cercle sonore qui vous sera présenté, en l'adaptant à vos inspirations et expirations. Pour commencer, vous pouvez utiliser à la fois le son et la visualisation du cercle pour vous aider à synchroniser votre respiration. Ensuite, pour une expérience optimale, nous vous recommandons de fermer les yeux et de vous concentrer uniquement sur le son. Laissez-vous guider par celui-ci dans votre pratique de la pleine conscience.</p>
+
+		
+
+
 
 		<script type="module" >
-			const audioElement1 = document.getElementById('audioElement1');
-			const audioElement2 = document.getElementById('audioElement2');
+			const contenuElement = document.getElementById('contenu');
+			
+			
+
+			const audioElement1 = new Audio('https://raw.githubusercontent.com/aeffront/breath/main/kong.wav')
+			const audioElement2 = new Audio('https://raw.githubusercontent.com/aeffront/breath/main/kong2.wav')
+
+			console.log(audioElement1);
 
 			let canvas = document.getElementById('myCanvas');
 			    let ctx = canvas.getContext('2d');
@@ -31,18 +63,29 @@
 
 			    console.log(width,height);
 
-			    let text = 'kjhgfghjklkjhghjhgfdsdfghj<br>jhgfdsdfghjk';
+			    
 
-			    ctx.textAlign = 'center';
-
-			    ctx.fillText(text,width/2,height/2);
+                
+                
+			     
 
 			    
 
 			let button = document.getElementById('myButton');
 			canvas.addEventListener('touchstart',((e)=>{
-				
-		    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+				myScript();
+
+			}))
+
+			canvas.addEventListener('click',((e)=>{
+				myScript();
+
+			}))
+
+			function myScript(){
+						    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+						    overlayParagraph1.style.display = 'none';
+						   
 
 		    class Circle{
 			    	constructor(size,factor){
@@ -77,19 +120,14 @@
 
 				frame++
 				
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = 'rgba(255,255,255,1';
 				ctx.fillRect(0,0,width,height);
 
-				ctx.strokeStyle =ctx.fillStyle = 'hsl(120,'+(1+Math.sin(frame*0.005*Math.PI))*100+'%,70%)';
+				ctx.strokeStyle =ctx.fillStyle = 'hsl(226,80%,77%)';
 
                 ctx.beginPath()
-                ctx.arc(width/2,height/2,(1+Math.sin(frame*0.005*Math.PI))*0.5*height*0.3+height*0.1,0,Math.PI*2);
+                ctx.arc(width/2,height/2,(1+Math.sin(frame*0.005*Math.PI))*0.5*width*0.2+width*0.1,0,Math.PI*2);
                 ctx.fill();
-                ctx.stroke();
-
-                ctx.beginPath()
-                ctx.arc(width/2,height/2,(1+Math.sin(frame*0.005*Math.PI))*0.5*height*0.3+height*0.15,0,Math.PI*2);
-                
                 ctx.stroke();
 
                 circles.forEach((circle)=>{
@@ -102,8 +140,8 @@
                 	audioElement1.currentTime = 0;
                 	audioElement1.play();
 
-                	const circle = new Circle(height*0.45,1);
-                	circles.push(circle);
+                	/*const circle = new Circle(width*0.35,1);
+                	circles.push(circle);*/
 
                 }
 
@@ -113,8 +151,8 @@
                 	audioElement2.currentTime = 0;
                 	audioElement2.play();
 
-                	const circle = new Circle(height*0.15,3);
-                	circles.push(circle);
+                	/*const circle = new Circle(width*0.15,3);
+                	circles.push(circle);*/
                 }
 
 				requestAnimationFrame(sketch);
@@ -127,11 +165,7 @@
 
 
 
-
-
-
-
-			}))
+			}
 			
             
 			
